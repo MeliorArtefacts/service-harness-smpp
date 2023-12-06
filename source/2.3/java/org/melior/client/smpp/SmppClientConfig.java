@@ -35,7 +35,7 @@ public class SmppClientConfig extends ClientConfig {
 
     private Alphabet alphabet = Alphabet.ALPHA_DEFAULT;
 
-    private MessageClass messageClass = MessageClass.CLASS1;
+    private MessageClass messageClass = null;
 
     private int connections = 1;
 

@@ -122,6 +122,7 @@ public class SmppClient extends SmppClientConfig {
         Timer timer;
         ClientSession connection;
         DataCoding dataCoding;
+	    short messageReference;
         String[] segments;
         byte segmentSeq;
         SubmitSmResult response;
@@ -144,6 +145,8 @@ public class SmppClient extends SmppClientConfig {
 
                 if (message.getMessageText().length() > 160) {
 
+                    messageReference = (short) messageNumber.nextInt();
+
                     segments = getSegments(message.getMessageText());
 
                     for (byte i = 0; i < segments.length; i++) {
@@ -153,7 +156,7 @@ public class SmppClient extends SmppClientConfig {
                         response = sendSegment(connection, message.getSourceAddress(), message.getDestinationAddress(),
                             new ESMClass(), segments[i], getRegisteredDelivery((i == 0) && registeredDelivery), dataCoding,
                             new OptionalParameter.More_messages_to_send((byte) (((segmentSeq == segments.length) ? 0 : 1) ^ ((flipMmts == true) ? 1 : 0))),
-                            new OptionalParameter.Sar_msg_ref_num((short) messageNumber.nextInt()),
+                            new OptionalParameter.Sar_msg_ref_num(messageReference),
                             new OptionalParameter.Sar_segment_seqnum(segmentSeq),
                             new OptionalParameter.Sar_total_segments((byte) segments.length));
 
